@@ -20,10 +20,12 @@ interface MovieService {
         @Query("query") query : String
     ) : SearchResponse
 
+    @GET("movie/{movie_id}")
     suspend fun getMovie(
         @Path("movie_id") movieId : Int
     ) : MovieDetailsResponse
 
+    @GET("movie/{movie_id}/similar")
     suspend fun getMoviesSimilar(
         @Path("movie_id") movieId: Int,
         @Query("page") page : Int

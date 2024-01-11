@@ -4,11 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class MovieResult(
 
-    /*
-    @SerializedName é uma forma de mapear o arquivo Json para o Java, isso signica que o backdrop_path
-    recebido na requisição corresponderá ao backdropPath.
-     */
-
     @SerializedName("adult")
     val adult: Boolean,
 
@@ -18,7 +13,7 @@ data class MovieResult(
     @SerializedName("genre_ids")
     val genreIds: List<Int>,
 
-    @SerializedName("page")
+    @SerializedName("id")
     val id: Int,
 
     @SerializedName("original_language")

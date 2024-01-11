@@ -13,7 +13,6 @@ class MoviePopularRemoteDataSourceImpl @Inject constructor(
        return MoviePagingSource(this)
     }
 
-
     override suspend fun getPopularMovies(page: Int): MovieResponse {
         return service.getPopularMovies(page = page)
     }
