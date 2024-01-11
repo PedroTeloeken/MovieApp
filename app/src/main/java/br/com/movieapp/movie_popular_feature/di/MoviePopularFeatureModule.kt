@@ -8,10 +8,11 @@ import br.com.movieapp.movie_popular_feature.domain.source.MoviePopularRemoteDat
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SinceKotlin::class)
+@InstallIn(SingletonComponent::class)
 object MoviePopularFeatureModule {
 
     @Singleton
