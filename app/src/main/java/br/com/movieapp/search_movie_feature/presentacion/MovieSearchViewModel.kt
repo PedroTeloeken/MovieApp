@@ -21,9 +21,7 @@ class MovieSearchViewModel @Inject constructor(
 
     fun fetch(query: String) {
         val movies = getMovieSearchUseCase
-            .invoke(
-                params = GetMovieSearchUseCase.Params(query = query)
-            ).cachedIn(viewModelScope)
+            .invoke(params = GetMovieSearchUseCase.Params(query = query)).cachedIn(viewModelScope)
 
         uiState = uiState.copy(movies = movies)
 
