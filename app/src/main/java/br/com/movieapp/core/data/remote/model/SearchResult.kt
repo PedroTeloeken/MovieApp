@@ -36,7 +36,7 @@ data class SearchResult(
     val releaseDate: String,
 
     @SerializedName("title")
-    val title: String,
+    val title: String?,
 
     @SerializedName("video")
     val video: Boolean,

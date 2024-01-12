@@ -5,6 +5,8 @@ import br.com.movieapp.search_movie_feature.data.repository.MovieSearchRepositor
 import br.com.movieapp.search_movie_feature.data.source.MovieSearchRemoteDataSourceImpl
 import br.com.movieapp.search_movie_feature.domain.repository.MovieSearchRepository
 import br.com.movieapp.search_movie_feature.domain.source.MovieSearchRemoteDataSource
+import br.com.movieapp.search_movie_feature.domain.usecase.GetMovieSearchUseCase
+import br.com.movieapp.search_movie_feature.domain.usecase.GetMovieSearchUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,6 +27,12 @@ object MovieSearchFeatureModule {
     @Singleton
     fun provideMovieRepository(remoteDataSource: MovieSearchRemoteDataSource): MovieSearchRepository {
         return MovieSearchRepositoryImpl(remoteDataSource = remoteDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetMovieSearchUseCase(repository: MovieSearchRepository): GetMovieSearchUseCase {
+        return GetMovieSearchUseCaseImpl(repository)
     }
 
 }

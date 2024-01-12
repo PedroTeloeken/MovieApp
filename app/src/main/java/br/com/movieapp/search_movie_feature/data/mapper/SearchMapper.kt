@@ -7,7 +7,7 @@ import br.com.movieapp.core.util.toPostUrl
 fun List<SearchResult>.toMovieSearch() = map {
     MovieSearch(
         id = it.id,
-        title = it.title,
+        title = it.title ?: "",
         voteAverage = it.voteAverage,
         imageUrl = it.posterPath.toPostUrl()
     )
