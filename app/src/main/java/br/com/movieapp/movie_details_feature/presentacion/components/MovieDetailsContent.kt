@@ -53,7 +53,7 @@ fun MovieDetailsContent(
     isLoading: Boolean,
     isError: String,
     iconColor: Color,
-    onAddFavorite: (Movie) -> Unit
+    onAddFavorite: (Movie) -> Unit = {},
 ) {
 
     Box(
@@ -127,7 +127,7 @@ fun MovieDetailsContent(
             Spacer(modifier = modifier.height(14.dp))
 
             MovieDetailOverview(
-                overview = movieDetails?.overview.toString(),
+                overview = movieDetails?.overview ?: "Não veio nada",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)

@@ -45,14 +45,14 @@ fun MovieDetailOverview(
         if (expanded) {
             Text(
                 modifier = modifier.clickable { expanded = !expanded },
-                text = stringResource(id = R.string.description),
+                text = overview,
                 fontFamily = FontFamily.SansSerif,
                 color = Color.DarkGray,
                 fontSize = 15.sp
             )
         } else {
             Text(
-                text = stringResource(id = R.string.description),
+                text = overview,
                 modifier = modifier.clickable { expanded = !expanded },
                 fontFamily = FontFamily.SansSerif,
                 overflow = TextOverflow.Ellipsis,

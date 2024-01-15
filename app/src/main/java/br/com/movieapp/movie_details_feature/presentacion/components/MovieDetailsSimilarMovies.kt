@@ -18,7 +18,7 @@ import br.com.movieapp.movie_popular_feature.presentacion.components.MovieItem
 @Composable
 fun MovieDetailsSimilarMovies(
     modifier: Modifier = Modifier,
-    pagingMoviesSimilar: LazyPagingItems<Movie>
+    pagingMoviesSimilar: LazyPagingItems<Movie>,
 ) {
 
     LazyVerticalGrid(
@@ -66,6 +66,7 @@ fun MovieDetailsSimilarMovies(
                         }
                     }
                 }
+
                 loadState.append is LoadState.Error -> {
                     val error = pagingMoviesSimilar.loadState.refresh as LoadState.Error
                     item(span = {

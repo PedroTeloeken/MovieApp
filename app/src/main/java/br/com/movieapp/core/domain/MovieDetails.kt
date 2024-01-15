@@ -8,7 +8,7 @@ data class MovieDetails(
 
     val genres: List<String>,
 
-    val overview: String?,
+    val overview: String,
 
     val backdropPathUrl: String?,
 

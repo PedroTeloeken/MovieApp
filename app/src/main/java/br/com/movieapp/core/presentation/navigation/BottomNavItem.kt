@@ -1,12 +1,14 @@
 package br.com.movieapp.core.presentation.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
+import br.com.movieapp.core.util.Constants.MOVIE_DETAIL_ARGUMENT_KEY
 
-sealed class BottomNavItem(val title: String , val icon: ImageVector , val route: String){
+sealed class BottomNavItem(val title: String, val icon: ImageVector, val route: String) {
 
     object MoviePopular : BottomNavItem(
         title = "Filmes Populares",
@@ -26,4 +28,12 @@ sealed class BottomNavItem(val title: String , val icon: ImageVector , val route
         route = "movie_favorite_screen"
     )
 
+    object MovieDetail : BottomNavItem(
+        title = "Detalhes",
+        icon = Icons.Default.Details,
+        route = "movie_detail_screen?$MOVIE_DETAIL_ARGUMENT_KEY=" + "{$MOVIE_DETAIL_ARGUMENT_KEY}"
+    ) {
+        fun passMovieId(movieId: Int) = "movie_detail_screen?$MOVIE_DETAIL_ARGUMENT_KEY=$movieId"
+
+    }
 }

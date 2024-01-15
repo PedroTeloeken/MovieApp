@@ -89,7 +89,7 @@ private fun MovieInfoContentPreview(
             id = 10,
             title = "Filme",
             genres = listOf("Aventura", "comédia"),
-            overview = null,
+            overview = "",
             releaseDate = LocalDate.now().toString(),
             voteAverage = 9.0,
             duration = 90,
