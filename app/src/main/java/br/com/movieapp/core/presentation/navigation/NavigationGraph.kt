@@ -11,6 +11,8 @@ import androidx.navigation.navArgument
 import br.com.movieapp.core.util.Constants
 import br.com.movieapp.movie_details_feature.presentacion.MovieDetailViewModel
 import br.com.movieapp.movie_details_feature.presentacion.MovieDetailsScreen
+import br.com.movieapp.movie_favorite_screen.presentancion.MovieFavoriteScreen
+import br.com.movieapp.movie_favorite_screen.presentancion.MovieFavoriteViewModel
 import br.com.movieapp.movie_popular_feature.presentacion.MoviePopularScreen
 import br.com.movieapp.movie_popular_feature.presentacion.MoviePopularViewModel
 import br.com.movieapp.search_movie_feature.presentacion.MovieSearchEvent
@@ -60,6 +62,16 @@ fun NavigationGraph(navController: NavHostController) {
 
         composable(BottomNavItem.MovieFavorite.route) {
 
+            val viewModel: MovieFavoriteViewModel = hiltViewModel()
+            val uiState = viewModel.uiState
+
+            MovieFavoriteScreen(
+                uiState = uiState,
+                navigateToDetails = {
+                    navController.navigate(BottomNavItem.MovieDetail.passMovieId(it))
+                }
+            )
+
         }
 
         composable(
@@ -83,7 +95,7 @@ fun NavigationGraph(navController: NavHostController) {
                 uiState = uiState,
                 getMovieDetail = getMovieDetail,
 
-            )
+                )
         }
     }
 }
