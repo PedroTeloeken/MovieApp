@@ -4,9 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.movieapp.core.domain.Movie
+import br.com.movieapp.core.util.Constants
 import br.com.movieapp.core.util.ResultData
 import br.com.movieapp.core.util.UtilFunctions
 import br.com.movieapp.movie_details_feature.domain.usecase.GetMovieDetailsUseCase
@@ -26,11 +28,22 @@ class MovieDetailViewModel @Inject constructor(
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val addMovieFavoriteUseCase: AddMovieFavoriteUseCase,
     private val deleteMovieFavoriteUseCase: DeleteMovieFavoriteUseCase,
-    private val isMovieFavoriteUseCase: IsFavoriteMoviesUseCase
+    private val isMovieFavoriteUseCase: IsFavoriteMoviesUseCase,
+    saveStateHandle : SavedStateHandle
 ) : ViewModel() {
 
     var uiState by mutableStateOf(MovieDetailState())
         private set
+
+
+    private val movieId = saveStateHandle.get<Int>(key = Constants.MOVIE_DETAIL_ARGUMENT_KEY)
+
+    init {
+        movieId?.let {
+            checkedFavorite(MovieDetailEvent.CheckedFavorite(it))
+            getMovieDetail(MovieDetailEvent.GetMovieDetail(it))
+        }
+    }
 
     fun getMovieDetail(getMovieDetails: MovieDetailEvent.GetMovieDetail) {
         event(getMovieDetails)
