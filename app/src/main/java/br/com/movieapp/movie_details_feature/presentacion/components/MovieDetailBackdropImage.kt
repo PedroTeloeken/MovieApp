@@ -6,12 +6,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.movieapp.R
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import br.com.movieapp.core.presentation.components.common.AsyncImageUrl
 
 @Composable
 fun MovieDetailBackdropImage(
@@ -20,14 +17,8 @@ fun MovieDetailBackdropImage(
 ) {
 
     Box(modifier = modifier) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(imageUrl)
-                .crossfade(true)
-                .error(R.drawable.ic_error_image)
-                .placeholder(R.drawable.ic_placeholder)
-                .build(),
-            contentDescription = null,
+        AsyncImageUrl(
+            imageUrl = imageUrl,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxWidth()
         )
