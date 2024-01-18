@@ -18,4 +18,5 @@
 
     <!--    Movie Search-->
     <string name="search_movies_field">Pesquisar filmes</string>
+    <string name="favorite_movies_empty">Nenhum filme favoritado</string>
 </resources>
