@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import br.com.movieapp.ui.theme.black
 import br.com.movieapp.ui.theme.yellow
@@ -34,10 +35,10 @@ fun BottomNavigationBar(
             BottomNavigationItem(
                 selected = currentRoute == destinations.route,
                 onClick = {
-                          navController.navigate(destinations.route){
-                              //permite que a nova tela esteja no top da pilha
-                              launchSingleTop = true
-                          }
+                    navController.navigate(destinations.route) {
+                        //permite que a nova tela esteja no top da pilha
+                        launchSingleTop = true
+                    }
                 },
                 icon = {
                     Icon(imageVector = destinations.icon, contentDescription = null)
@@ -48,5 +49,10 @@ fun BottomNavigationBar(
             )
         }
     }
+}
 
+@Composable
+fun currentRoute(navController: NavHostController): String? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    return navBackStackEntry?.destination?.route
 }

@@ -7,7 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import br.com.movieapp.core.presentation.navigation.BottomNavigationBar
+import br.com.movieapp.core.presentation.navigation.DetailsScreenNav
 import br.com.movieapp.core.presentation.navigation.NavigationGraph
+import br.com.movieapp.core.presentation.navigation.currentRoute
 
 @Composable
 fun MainScreen(
@@ -16,7 +18,9 @@ fun MainScreen(
 
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(navController = navController)
+            if (currentRoute(navController = navController) != DetailsScreenNav.DetailsScreen.route) {
+                BottomNavigationBar(navController = navController)
+            }
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
