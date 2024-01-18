@@ -1,7 +1,6 @@
 package br.com.movieapp.core.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -88,11 +87,16 @@ fun NavigationGraph(navController: NavHostController) {
 
             val viewModel: MovieDetailViewModel = hiltViewModel()
             val uiState = viewModel.uiState
+            val onAddFavorite = viewModel::onAddFavorite
+            val checkedFavorite = viewModel::checkedFavorite
+
             val getMovieDetail = viewModel::getMovieDetail
 
             MovieDetailsScreen(
                 id = it.arguments?.getInt(Constants.MOVIE_DETAIL_ARGUMENT_KEY),
                 uiState = uiState,
+                onAddFavorite = onAddFavorite,
+                checkFavorite = checkedFavorite,
                 getMovieDetail = getMovieDetail,
 
                 )

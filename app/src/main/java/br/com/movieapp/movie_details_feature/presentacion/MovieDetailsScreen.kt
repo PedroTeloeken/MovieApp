@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.collectAsLazyPagingItems
 import br.com.movieapp.R
+import br.com.movieapp.core.domain.Movie
 import br.com.movieapp.movie_details_feature.presentacion.components.MovieDetailsContent
 import br.com.movieapp.movie_details_feature.presentacion.state.MovieDetailState
 import br.com.movieapp.ui.theme.black
@@ -19,6 +20,8 @@ import br.com.movieapp.ui.theme.white
 fun MovieDetailsScreen(
     id: Int?,
     uiState: MovieDetailState,
+    onAddFavorite: (Movie) -> Unit = {},
+    checkFavorite: (MovieDetailEvent.CheckedFavorite) -> Unit = {},
     getMovieDetail: (MovieDetailEvent.GetMovieDetail) -> Unit = {},
 ) {
 
@@ -27,6 +30,7 @@ fun MovieDetailsScreen(
     LaunchedEffect(key1 = true) {
         if (id != null) {
             getMovieDetail(MovieDetailEvent.GetMovieDetail(id))
+            checkFavorite(MovieDetailEvent.CheckedFavorite(id))
         }
     }
 
@@ -47,11 +51,8 @@ fun MovieDetailsScreen(
             isError = uiState.error,
             iconColor = uiState.iconColor,
             onAddFavorite = {
-
+                onAddFavorite(it)
             }
         )
-
-
     }
-
 }
