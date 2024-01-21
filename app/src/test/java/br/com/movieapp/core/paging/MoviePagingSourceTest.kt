@@ -2,6 +2,7 @@ package br.com.movieapp.core.paging
 
 import androidx.paging.PagingSource
 import br.com.movieapp.TestDispatcherRule
+import br.com.movieapp.core.domain.Movie
 import br.com.movieapp.core.domain.model.MovieFactory
 import br.com.movieapp.core.domain.model.MoviePagingFactory
 import br.com.movieapp.movie_popular_feature.domain.source.MoviePopularRemoteDataSource
@@ -15,6 +16,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import java.lang.RuntimeException
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -65,4 +67,28 @@ class MoviePagingSourceTest {
         ).isEqualTo(result)
 
     }
+
+    @Test
+    fun `must return a error load result when load is called`() = runTest {
+
+        //Given
+        val exception = RuntimeException()
+        whenever(remoteDataSource.getPopularMovies(any()))
+            .thenThrow(exception)
+
+        //when
+        val result = moviePagingSource.load(
+            PagingSource.LoadParams.Refresh(
+                key = null,
+                loadSize = 2,
+                placeholdersEnabled = false
+            )
+        )
+
+        //then
+        assertThat(PagingSource.LoadResult.Error<Int, Movie>(exception))
+            .isEqualTo(result)
+
+    }
+
 }
