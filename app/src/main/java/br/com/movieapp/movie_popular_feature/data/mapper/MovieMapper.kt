@@ -12,3 +12,12 @@ fun List<MovieResult>.toMovie() = map { movieResult ->
         imageUrl = movieResult.posterPath?.toPostUrl() ?: ""
     )
 }
+
+fun MovieResult.toMovie(): Movie {
+    return Movie(
+        id = id,
+        title= title,
+        voteAverage = voteAverage,
+        imageUrl = posterPath?.toPostUrl() ?: ""
+    )
+}

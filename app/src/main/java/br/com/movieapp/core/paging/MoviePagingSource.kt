@@ -3,10 +3,7 @@ package br.com.movieapp.core.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import br.com.movieapp.core.domain.Movie
-import br.com.movieapp.movie_popular_feature.data.mapper.toMovie
 import br.com.movieapp.movie_popular_feature.domain.source.MoviePopularRemoteDataSource
-import okio.IOException
-import retrofit2.HttpException
 
 class MoviePagingSource(
     private val remoteDataSource: MoviePopularRemoteDataSource
@@ -15,11 +12,12 @@ class MoviePagingSource(
     companion object {
         private const val LIMIT = 20
     }
+
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
-       return state.anchorPosition?.let { anchorPosition ->
-           val anchorPage = state.closestPageToPosition(anchorPosition)
-           anchorPage?.prevKey?.plus(LIMIT) ?: anchorPage?.nextKey?.minus(LIMIT)
-       }
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(LIMIT) ?: anchorPage?.nextKey?.minus(LIMIT)
+        }
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
@@ -27,20 +25,19 @@ class MoviePagingSource(
 
             val pageNumber = params.key ?: 1
 
-            val response = remoteDataSource.getPopularMovies(pageNumber)
+            val moviePaging = remoteDataSource.getPopularMovies(pageNumber)
 
-            val movies = response.results
+            val movies = moviePaging.movies
+
+            val totalPages = moviePaging.totalPage
 
             LoadResult.Page(
-                data = movies.toMovie(),
+                data = movies,
                 prevKey = if (pageNumber == 1) null else pageNumber - 1,
-                nextKey = if (movies.isEmpty()) null else pageNumber + 1
+                nextKey = if (pageNumber == totalPages) null else pageNumber + 1
             )
 
-        } catch (exception: IOException) {
-            exception.printStackTrace()
-            return LoadResult.Error(exception)
-        } catch (exception: HttpException) {
+        } catch (exception: Exception) {
             exception.printStackTrace()
             return LoadResult.Error(exception)
         }
