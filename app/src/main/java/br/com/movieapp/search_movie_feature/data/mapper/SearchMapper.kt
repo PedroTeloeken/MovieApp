@@ -12,3 +12,12 @@ fun List<SearchResult>.toMovieSearch() = map {
         imageUrl = it.posterPath.toPostUrl()
     )
 }
+
+fun SearchResult.toMovieSearch() : MovieSearch {
+    return MovieSearch(
+        id = id,
+        title = title ?: "",
+        imageUrl = posterPath.toPostUrl(),
+        voteAverage = voteAverage
+    )
+}
