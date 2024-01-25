@@ -3,6 +3,7 @@ package br.com.movieapp.movie_favorite_screen.domain.usecase
 import br.com.movieapp.core.domain.Movie
 import br.com.movieapp.movie_favorite_screen.domain.repository.MovieFavoriteRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 interface GetMoviesFavoriteUseCase {
@@ -14,7 +15,12 @@ class GetMoviesFavoriteUseCaseImpl @Inject constructor(
     private val movieFavoriteRepository: MovieFavoriteRepository
 ) : GetMoviesFavoriteUseCase {
     override suspend fun invoke(): Flow<List<Movie>> {
-        return movieFavoriteRepository.getMovie()
+        return try {
+            movieFavoriteRepository.getMovie()
+        } catch (e: Exception) {
+            emptyFlow()
+        }
+
     }
 
 }

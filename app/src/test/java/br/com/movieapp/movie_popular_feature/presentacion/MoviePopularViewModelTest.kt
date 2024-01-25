@@ -5,6 +5,7 @@ import br.com.movieapp.TestDispatcherRule
 import br.com.movieapp.core.domain.model.MovieFactory
 import br.com.movieapp.movie_popular_feature.domain.usecase.GetMoviesPopularUseCase
 import com.google.common.truth.Truth.assertThat
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -43,7 +44,7 @@ class MoviePopularViewModelTest {
         runTest {
 
             //Given
-            whenever(getPopularMovieUseCase()).thenReturn(flowOf(fakePagingDataMovies))
+            whenever(getPopularMovieUseCase(any())).thenReturn(flowOf(fakePagingDataMovies))
 
             //When
             val result = viewModel.uiState.movies.first()
@@ -58,7 +59,7 @@ class MoviePopularViewModelTest {
         runTest {
 
             //Given
-            whenever(getPopularMovieUseCase.invoke()).thenThrow(
+            whenever(getPopularMovieUseCase.invoke(any())).thenThrow(
                 RuntimeException()
             )
 
