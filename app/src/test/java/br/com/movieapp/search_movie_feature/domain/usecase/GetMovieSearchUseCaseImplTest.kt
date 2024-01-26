@@ -1,7 +1,6 @@
 package br.com.movieapp.search_movie_feature.domain.usecase
 
 import androidx.paging.PagingConfig
-import androidx.paging.PagingSource
 import br.com.movieapp.TestDispatcherRule
 import br.com.movieapp.core.domain.model.MovieSearchFactory
 import br.com.movieapp.core.domain.model.PagingSourceMoviesSearchFactory
@@ -18,7 +17,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import java.lang.RuntimeException
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
