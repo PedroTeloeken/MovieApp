@@ -91,7 +91,7 @@ class MovieDetailViewModelTest {
 
             //then
             verify(isMovieFavoriteUseCase).invoke(checkArgumentCaptor.capture())
-            assertThat(movieDetailsFactory.id).isEqualTo(argumentCaptor.firstValue.movieId)
+            assertThat(movie.id).isEqualTo(checkArgumentCaptor.firstValue.movieId)
 
             verify(getMovieDetailUseCase).invoke(argumentCaptor.capture())
             assertThat(movieDetailsFactory.id).isEqualTo(argumentCaptor.firstValue.movieId)
@@ -108,11 +108,13 @@ class MovieDetailViewModelTest {
     fun `must notify with failure when get movie details and returns exception`() = runTest {
 
         //Given
-        val exception = Exception("Um erro ocorreu")
-        whenever(getMovieDetailUseCase.invoke(any())).thenReturn(ResultData.Failure(exception))
+        val exception = RuntimeException("Um erro ocorreu")
 
-        whenever(isMovieFavoriteUseCase.invoke(any())).thenReturn(flowOf(ResultData.Failure(exception)))
+        whenever(getMovieDetailUseCase.invoke(any()))
+            .thenReturn(ResultData.Failure(exception))
 
+        whenever(isMovieFavoriteUseCase.invoke(any()))
+            .thenReturn(flowOf(ResultData.Failure(exception)))
 
         //when
         viewModel.uiState.isLoading
@@ -125,39 +127,6 @@ class MovieDetailViewModelTest {
 
     @Test
     fun `must call delete favorite and notify of uiState with filled favorite icon when current icon is checked`() =
-        runTest {
-
-            //Given
-            whenever(addMovieDetailsUseCase.invoke(any())).thenReturn(
-                flowOf(ResultData.Success(Unit))
-            )
-
-            whenever(isMovieFavoriteUseCase.invoke(any())).thenReturn(
-                flowOf(ResultData.Success(false))
-            )
-
-            val deleteArgumentCaptor = argumentCaptor<DeleteMovieFavoriteUseCase.Params>()
-            val checkedArgumentCaptor = argumentCaptor<IsFavoriteMoviesUseCase.Params>()
-
-            //when
-            viewModel.onAddFavorite(movie)
-
-            //then
-            verify(deleteMovieDetailsUseCase).invoke(deleteArgumentCaptor.capture())
-
-            assertThat(movie).isEqualTo(deleteArgumentCaptor.firstValue.movie)
-
-            verify(isMovieFavoriteUseCase).invoke(checkedArgumentCaptor.capture())
-            assertThat(movie.id).isEqualTo(checkedArgumentCaptor.firstValue.movieId)
-
-            val iconColor = viewModel.uiState.iconColor
-
-            assertThat(Color.White).isEqualTo(iconColor)
-
-        }
-
-    @Test
-    fun `must notify uiState with filled favorite icon when current icon is unchecked`() =
         runTest {
 
             //Given
@@ -183,6 +152,36 @@ class MovieDetailViewModelTest {
             assertThat(movie.id).isEqualTo(checkedArgumentCaptor.firstValue.movieId)
 
             val iconColor = viewModel.uiState.iconColor
+            assertThat(Color.White).isEqualTo(iconColor)
+
+        }
+
+    @Test
+    fun `must notify uiState with filled favorite icon when current icon is unchecked`() =
+        runTest {
+
+            //Given
+            whenever(addMovieDetailsUseCase.invoke(any())).thenReturn(
+                flowOf(ResultData.Success(Unit))
+            )
+
+            whenever(isMovieFavoriteUseCase.invoke(any()))
+                .thenReturn(flowOf(ResultData.Success(false)))
+
+            val addMovieFavoriteUseCase = argumentCaptor<AddMovieFavoriteUseCase.Params>()
+            val checkedArgumentCaptor = argumentCaptor<IsFavoriteMoviesUseCase.Params>()
+
+            //when
+            viewModel.onAddFavorite(movie)
+
+            //then
+            verify(addMovieDetailsUseCase).invoke(addMovieFavoriteUseCase.capture())
+            assertThat(movie).isEqualTo(addMovieFavoriteUseCase.firstValue.movie)
+
+            verify(isMovieFavoriteUseCase).invoke(checkedArgumentCaptor.capture())
+            assertThat(movie.id).isEqualTo(checkedArgumentCaptor.firstValue.movieId)
+
+            val iconColor = viewModel.uiState.iconColor
             assertThat(Color.Red).isEqualTo(iconColor)
 
         }
@@ -194,6 +193,9 @@ class MovieDetailViewModelTest {
             //Given
             whenever(isMovieFavoriteUseCase.invoke(any()))
                 .thenReturn(flowOf(ResultData.Success(true)))
+
+            whenever(getMovieDetailUseCase.invoke(any()))
+                .thenReturn(ResultData.Success(flowOf(pagingData) to movieDetailsFactory))
 
             val checkedArgumentCaptor = argumentCaptor<IsFavoriteMoviesUseCase.Params>()
 
@@ -217,13 +219,16 @@ class MovieDetailViewModelTest {
             whenever(isMovieFavoriteUseCase.invoke(any()))
                 .thenReturn(flowOf(ResultData.Success(false)))
 
+            whenever(getMovieDetailUseCase.invoke(any()))
+                .thenReturn(ResultData.Success(flowOf(pagingData) to movieDetailsFactory))
+
             val checkedArgumentCaptor = argumentCaptor<IsFavoriteMoviesUseCase.Params>()
 
             //when
             viewModel.uiState.isLoading
 
+            //Then
             verify(isMovieFavoriteUseCase).invoke(checkedArgumentCaptor.capture())
-
             assertThat(movie.id).isEqualTo(checkedArgumentCaptor.firstValue.movieId)
 
             val iconColor = viewModel.uiState.iconColor

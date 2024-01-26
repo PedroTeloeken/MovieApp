@@ -64,7 +64,8 @@ class MovieDetailViewModel @Inject constructor(
         }
     }
 
-    fun pagingConfig(): PagingConfig {
+
+    private fun pagingConfig(): PagingConfig {
         return PagingConfig(
             pageSize = 20,
             initialLoadSize = 20

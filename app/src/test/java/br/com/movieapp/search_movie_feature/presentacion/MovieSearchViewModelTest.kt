@@ -77,8 +77,6 @@ class MovieSearchViewModelTest {
             //when
             viewModel.fetch("")
 
-
-
         }
 
 }
