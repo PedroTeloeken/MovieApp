@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingConfig
 import br.com.movieapp.core.domain.Movie
 import br.com.movieapp.core.util.Constants
 import br.com.movieapp.core.util.ResultData
@@ -29,7 +30,7 @@ class MovieDetailViewModel @Inject constructor(
     private val addMovieFavoriteUseCase: AddMovieFavoriteUseCase,
     private val deleteMovieFavoriteUseCase: DeleteMovieFavoriteUseCase,
     private val isMovieFavoriteUseCase: IsFavoriteMoviesUseCase,
-    saveStateHandle : SavedStateHandle
+    saveStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     var uiState by mutableStateOf(MovieDetailState())
@@ -61,6 +62,13 @@ class MovieDetailViewModel @Inject constructor(
             Timber.i("Passei aqui para remover")
             event(MovieDetailEvent.RemoveFavorite(movie = movie))
         }
+    }
+
+    fun pagingConfig(): PagingConfig {
+        return PagingConfig(
+            pageSize = 20,
+            initialLoadSize = 20
+        )
     }
 
     private fun event(event: MovieDetailEvent) {
@@ -143,34 +151,36 @@ class MovieDetailViewModel @Inject constructor(
 
             is MovieDetailEvent.GetMovieDetail -> {
                 viewModelScope.launch {
-                    getMovieDetailsUseCase.invoke(
-                        params = GetMovieDetailsUseCase.Params(movieId = event.movieId)
-                    ).collect { resultData ->
-                        when (resultData) {
-                            is ResultData.Success -> {
-                                uiState = uiState.copy(
-                                    isLoading = false,
-                                    movieDetails = resultData.data?.second,
-                                    results = resultData.data?.first ?: emptyFlow()
-                                )
-                            }
+                    val resultData = getMovieDetailsUseCase.invoke(
+                        params = GetMovieDetailsUseCase.Params(
+                            movieId = event.movieId,
+                            pagingConfig = pagingConfig()
+                        )
+                    )
+                    when (resultData) {
+                        is ResultData.Success -> {
+                            uiState = uiState.copy(
+                                isLoading = false,
+                                movieDetails = resultData.data?.second,
+                                results = resultData.data?.first ?: emptyFlow()
+                            )
+                        }
 
-                            is ResultData.Failure -> {
-                                uiState = uiState.copy(
-                                    isLoading = false,
-                                    error = resultData.e?.message.toString()
-                                )
-                                UtilFunctions.logError(
-                                    "DETAIL_ERROR",
-                                    resultData.e?.message.toString()
-                                )
-                            }
+                        is ResultData.Failure -> {
+                            uiState = uiState.copy(
+                                isLoading = false,
+                                error = resultData.e?.message.toString()
+                            )
+                            UtilFunctions.logError(
+                                "DETAIL_ERROR",
+                                resultData.e?.message.toString()
+                            )
+                        }
 
-                            is ResultData.Loading -> {
-                                uiState = uiState.copy(
-                                    isLoading = true
-                                )
-                            }
+                        is ResultData.Loading -> {
+                            uiState = uiState.copy(
+                                isLoading = true
+                            )
                         }
                     }
                 }

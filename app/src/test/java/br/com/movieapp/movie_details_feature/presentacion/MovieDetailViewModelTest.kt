@@ -78,16 +78,22 @@ class MovieDetailViewModelTest {
 
             //Given
             whenever(getMovieDetailUseCase.invoke(any()))
-                .thenReturn(flowOf(ResultData.Success(flowOf(pagingData) to movieDetailsFactory)))
+                .thenReturn(ResultData.Success(flowOf(pagingData) to movieDetailsFactory))
+
+            whenever(isMovieFavoriteUseCase.invoke(any())).thenReturn(flowOf(ResultData.Success(true)))
 
             val argumentCaptor = argumentCaptor<GetMovieDetailsUseCase.Params>()
+
+            val checkArgumentCaptor = argumentCaptor<IsFavoriteMoviesUseCase.Params>()
 
             //when
             viewModel.uiState.isLoading
 
             //then
-            verify(getMovieDetailUseCase).invoke(argumentCaptor.capture())
+            verify(isMovieFavoriteUseCase).invoke(checkArgumentCaptor.capture())
+            assertThat(movieDetailsFactory.id).isEqualTo(argumentCaptor.firstValue.movieId)
 
+            verify(getMovieDetailUseCase).invoke(argumentCaptor.capture())
             assertThat(movieDetailsFactory.id).isEqualTo(argumentCaptor.firstValue.movieId)
 
             val movieDetails = viewModel.uiState.movieDetails
@@ -103,7 +109,10 @@ class MovieDetailViewModelTest {
 
         //Given
         val exception = Exception("Um erro ocorreu")
-        whenever(getMovieDetailUseCase.invoke(any())).thenReturn(flowOf(ResultData.Failure(exception)))
+        whenever(getMovieDetailUseCase.invoke(any())).thenReturn(ResultData.Failure(exception))
+
+        whenever(isMovieFavoriteUseCase.invoke(any())).thenReturn(flowOf(ResultData.Failure(exception)))
+
 
         //when
         viewModel.uiState.isLoading
