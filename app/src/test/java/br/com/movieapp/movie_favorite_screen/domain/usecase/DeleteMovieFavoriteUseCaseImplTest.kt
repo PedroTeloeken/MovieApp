@@ -8,6 +8,7 @@ import com.google.common.truth.Truth
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -42,7 +43,7 @@ class DeleteMovieFavoriteUseCaseImplTest {
             //When
             val result = deleteMovieUseCase.invoke(DeleteMovieFavoriteUseCase.Params(movie = movie))
 
-            Truth.assertThat(result).isEqualTo(ResultData.Success(Unit))
+            Truth.assertThat(result).isEqualTo(flowOf(ResultData.Success(Unit)))
 
         }
 
@@ -53,7 +54,7 @@ class DeleteMovieFavoriteUseCaseImplTest {
             //Given
             val exception = RuntimeException()
 
-            whenever(movieFavoriteRepository.insert(movie = movie)).thenThrow(exception)
+            whenever(movieFavoriteRepository.delete(movie = movie)).thenThrow(exception)
 
             val result = deleteMovieUseCase.invoke(
                 params = DeleteMovieFavoriteUseCase.Params(movie = movie)
