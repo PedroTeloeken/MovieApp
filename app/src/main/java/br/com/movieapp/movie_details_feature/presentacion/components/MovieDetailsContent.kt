@@ -54,6 +54,7 @@ fun MovieDetailsContent(
     isError: String,
     iconColor: Color,
     onAddFavorite: (Movie) -> Unit = {},
+    onClickDetails:(Int) -> Unit = {}
 ) {
 
     Box(
@@ -172,7 +173,10 @@ fun MovieDetailsContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.35f)
-                .align(Alignment.BottomEnd)
+                .align(Alignment.BottomEnd),
+            onClickDetails = {
+                onClickDetails(it)
+            }
         )
 
     }
